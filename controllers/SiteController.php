@@ -32,7 +32,7 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    //'logout' => ['post'],
                 ],
             ],
         ];
@@ -55,8 +55,6 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
-     *
      * @return string
      */
     public function actionIndex()
@@ -87,8 +85,6 @@ class SiteController extends Controller
     }
 
     /**
-     * Logout action.
-     *
      * @return Response
      */
     public function actionLogout()
@@ -96,33 +92,5 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
-    }
-
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
     }
 }
