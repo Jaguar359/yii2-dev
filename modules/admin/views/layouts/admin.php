@@ -42,6 +42,8 @@ AppAsset::register($this);
             'options' => ['class' => 'navbar-nav navbar-right'],
             'items'   => [
                 ['label' => 'В начало', 'url' => ['/admin/']],
+                ['label' => 'Товар', 'url' => ['/admin/products']],
+                ['label' => 'Посты', 'url' => ['/admin/posts']],
             ],
         ]);
         NavBar::end();

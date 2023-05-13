@@ -2,17 +2,17 @@
 
 namespace app\modules\admin\controllers;
 
-use app\models\db\Products;
-use app\models\db\ProductsSearch;
 use Yii;
-use yii\filters\VerbFilter;
+use app\models\db\Posts;
+use app\models\db\PostsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
 /**
- * ProductsController implements the CRUD actions for Products model.
+ * PostsController implements the CRUD actions for Posts model.
  */
-class ProductsController extends Controller
+class PostsController extends Controller
 {
     public $layout = 'admin';
 
@@ -23,7 +23,7 @@ class ProductsController extends Controller
     {
         return [
             'verbs' => [
-                'class'   => VerbFilter::className(),
+                'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -32,25 +32,23 @@ class ProductsController extends Controller
     }
 
     /**
-     * Lists all Products models.
+     * Lists all Posts models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel  = new ProductsSearch();
+        $searchModel = new PostsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel'  => $searchModel,
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single Products model.
-     *
+     * Displays a single Posts model.
      * @param integer $id
-     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -62,19 +60,25 @@ class ProductsController extends Controller
     }
 
     /**
-     * Creates a new Products model.
+     * Creates a new Posts model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Products();
+        $model = new Posts();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect([
-                'view',
-                'id' => $model->id,
-            ]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->views < 10){
+                $model->views = rand(10, 100);
+            }
+            if ($model->likes < 10){
+                $model->likes = rand(10, 100);
+            }
+
+            $model->save();
+
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -83,11 +87,9 @@ class ProductsController extends Controller
     }
 
     /**
-     * Updates an existing Products model.
+     * Updates an existing Posts model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     *
      * @param integer $id
-     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -96,10 +98,7 @@ class ProductsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect([
-                'view',
-                'id' => $model->id,
-            ]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -108,11 +107,9 @@ class ProductsController extends Controller
     }
 
     /**
-     * Deletes an existing Products model.
+     * Deletes an existing Posts model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     *
      * @param integer $id
-     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -124,17 +121,15 @@ class ProductsController extends Controller
     }
 
     /**
-     * Finds the Products model based on its primary key value.
+     * Finds the Posts model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     *
      * @param integer $id
-     *
-     * @return Products the loaded model
+     * @return Posts the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Products::findOne($id)) !== null) {
+        if (($model = Posts::findOne($id)) !== null) {
             return $model;
         }
 
