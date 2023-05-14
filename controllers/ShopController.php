@@ -7,14 +7,15 @@ use yii\web\Controller;
 
 class ShopController extends Controller
 {
-    public $layout = 'main';
+    public $layout = false;
 
     /**
      * @return string
      */
     public function actionIndex()
     {
-        $products = Products::find()->asArray()->all();
+        $this->layout = 'products-all';
+        $products     = Products::find()->asArray()->all();
 
         return $this->render('index', [
             'products' => $products,
@@ -26,7 +27,9 @@ class ShopController extends Controller
      */
     public function actionView()
     {
+        $this->layout = 'products-view';
         $id = htmlspecialchars($_GET['id']);
+        Products::find()->where(['id' => $id])->one()->updateCounters(['views']);
 
         $product = Products::find()->where(['id' => $id])->one();
 
